@@ -2,3 +2,9 @@ node_modules/
 __pycache__/
 .env
 *.pyc
+.vscode/
+venv/
+backend/venv/
+backend/.venv/
+backend/.env
+backend/.python-version

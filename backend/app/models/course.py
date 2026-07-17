@@ -1,0 +1,34 @@
+from __future__ import annotations
+
+from datetime import datetime
+from typing import TYPE_CHECKING
+
+from sqlalchemy import DateTime, String, Text, func
+from sqlalchemy.orm import Mapped, mapped_column, relationship
+
+from app.database.base import Base
+
+if TYPE_CHECKING:
+    from app.models.curriculum_change import CurriculumChange
+    from app.models.module import Module
+
+
+class Course(Base):
+    __tablename__ = "courses"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    title: Mapped[str] = mapped_column(String(255), nullable=False)
+    description: Mapped[str | None] = mapped_column(Text, nullable=True)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), nullable=False
+    )
+    updated_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), nullable=False
+    )
+
+    modules: Mapped[list[Module]] = relationship(
+        back_populates="course", cascade="all, delete-orphan", order_by="Module.position"
+    )
+    curriculum_changes: Mapped[list[CurriculumChange]] = relationship(
+        back_populates="course", cascade="all, delete-orphan"
+    )

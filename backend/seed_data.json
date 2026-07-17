@@ -1,0 +1,183 @@
+{
+  "courses": [
+    {
+      "id": 1,
+      "title": "Advanced Computer Science",
+      "description": "An upper-level foundations course that develops rigorous competency in data structures, algorithm design, recursive problem solving, and hierarchical tree-based systems.",
+      "modules": [
+        {
+          "position": 1,
+          "title": "Data Structures",
+          "description": "Analyzes linear and associative data representations, their implementation trade-offs, and their role in efficient program design.",
+          "lessons": [
+            {
+              "position": 1,
+              "title": "Abstract Data Types and Complexity Contracts",
+              "description": "Defines abstract data types, representation invariants, and operation-level complexity guarantees."
+            },
+            {
+              "position": 2,
+              "title": "Linked Structures and Dynamic Memory",
+              "description": "Implements singly linked lists, doubly linked lists, stacks, and queues while reasoning about references and memory ownership."
+            },
+            {
+              "position": 3,
+              "title": "Hash Tables and Collision Resolution",
+              "description": "Compares chaining and open addressing strategies and evaluates load-factor effects on lookup performance."
+            }
+          ],
+          "learning_outcomes": [
+            {
+              "position": 1,
+              "statement": "Select an appropriate abstract data type by comparing operation costs and representation constraints."
+            },
+            {
+              "position": 2,
+              "statement": "Implement and test a dynamic data structure while preserving its representation invariants."
+            }
+          ]
+        },
+        {
+          "position": 2,
+          "title": "Algorithms",
+          "description": "Develops formal methods for designing, analyzing, and validating efficient algorithms over structured data.",
+          "lessons": [
+            {
+              "position": 1,
+              "title": "Asymptotic Analysis",
+              "description": "Uses Big-O, Big-Theta, and Big-Omega notation to compare algorithmic growth rates and scalability."
+            },
+            {
+              "position": 2,
+              "title": "Divide-and-Conquer Design",
+              "description": "Constructs recursive divide-and-conquer algorithms and derives recurrence relations for their running times."
+            },
+            {
+              "position": 3,
+              "title": "Sorting and Search Strategy Trade-offs",
+              "description": "Evaluates comparison-based sorting, binary search, stability, and the impact of input assumptions."
+            }
+          ],
+          "learning_outcomes": [
+            {
+              "position": 1,
+              "statement": "Analyze an algorithm's time and space complexity using asymptotic notation."
+            },
+            {
+              "position": 2,
+              "statement": "Design a divide-and-conquer solution and justify its correctness with a recurrence-based analysis."
+            }
+          ]
+        },
+        {
+          "position": 3,
+          "title": "Trees",
+          "description": "Introduces hierarchical data structures, traversal algorithms, balanced search trees, and recursive tree reasoning.",
+          "lessons": [
+            {
+              "position": 1,
+              "title": "Tree Terminology and Recursive Representation",
+              "description": "Models rooted trees using node, edge, depth, height, and subtree concepts with recursive definitions."
+            },
+            {
+              "position": 2,
+              "title": "Binary Search Tree Operations",
+              "description": "Implements insertion, search, deletion, and traversal operations while maintaining binary search tree ordering."
+            },
+            {
+              "position": 3,
+              "title": "Balancing and Tree Performance",
+              "description": "Explains how AVL-style balancing controls height and preserves efficient tree operations."
+            }
+          ],
+          "learning_outcomes": [
+            {
+              "position": 1,
+              "statement": "Trace recursive traversals and explain how subtree structure determines traversal output."
+            },
+            {
+              "position": 2,
+              "statement": "Implement binary search tree operations and evaluate their performance under balanced and unbalanced inputs."
+            }
+          ]
+        },
+        {
+          "position": 4,
+          "title": "Recursion",
+          "description": "Builds fluency with recursive specifications, call-stack behavior, termination arguments, and recursive decomposition.",
+          "lessons": [
+            {
+              "position": 1,
+              "title": "Base Cases and Recursive Decomposition",
+              "description": "Constructs recursive functions by identifying base cases, smaller subproblems, and progress toward termination."
+            },
+            {
+              "position": 2,
+              "title": "The Call Stack and Recursive State",
+              "description": "Traces activation records, parameter bindings, and return values during nested recursive calls."
+            },
+            {
+              "position": 3,
+              "title": "Recursive Backtracking",
+              "description": "Applies recursive search to constrained problems such as permutations, subsets, and path exploration."
+            }
+          ],
+          "learning_outcomes": [
+            {
+              "position": 1,
+              "statement": "Write a terminating recursive function with correct base cases and a valid recursive reduction."
+            },
+            {
+              "position": 2,
+              "statement": "Use call-stack traces to diagnose incorrect recursive state and backtracking behavior."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "proposed_changes": [
+    {
+      "id": "pr-001",
+      "course_id": 1,
+      "user_prompt": "Move Recursion before Trees",
+      "summary": "Reorder the Recursion module ahead of Trees so learners establish recursive reasoning and call-stack fluency before applying those ideas to tree traversal and binary search tree operations.",
+      "risk_level": "medium",
+      "affected_items": [
+        "Recursion: The Call Stack and Recursive State lesson",
+        "Trees: Tree Terminology and Recursive Representation lesson",
+        "Trees: Binary Search Tree Operations lesson",
+        "Quiz 3: Recursive Tree Traversal and BST Invariants"
+      ],
+      "generated_diff": "--- curriculum/module-order\n+++ curriculum/module-order\n@@\n- 3. Trees\n- 4. Recursion\n+ 3. Recursion\n+ 4. Trees\n@@\n- Trees: Tree Terminology and Recursive Representation\n+ Prerequisite added: Recursion: The Call Stack and Recursive State\n+ Trees: Tree Terminology and Recursive Representation\n@@\n- Quiz 3 assesses traversal after the Trees module\n+ Quiz 3 moves after Trees and now assumes completion of the Recursion module"
+    },
+    {
+      "id": "pr-002",
+      "course_id": 1,
+      "user_prompt": "Generate ESL accommodations for Module 1",
+      "summary": "Add English-language learner accommodations to all Data Structures lessons, including pre-taught terminology, visual process diagrams, and sentence frames for algorithm explanations.",
+      "risk_level": "low",
+      "affected_items": [
+        "Abstract Data Types and Complexity Contracts lesson",
+        "Linked Structures and Dynamic Memory lesson",
+        "Hash Tables and Collision Resolution lesson"
+      ],
+      "generated_diff": "--- curriculum/modules/data-structures/metadata\n+++ curriculum/modules/data-structures/metadata\n@@\n+ accessibility.esl_support: true\n+ accessibility.glossary_terms: [abstract data type, invariant, pointer, collision]\n+ accessibility.visual_aids: [operation-cost table, linked-list diagram, hash-collision animation]\n+ accessibility.sentence_frames: [\"The operation is efficient because...\", \"This structure preserves...\"]"
+    },
+    {
+      "id": "pr-003",
+      "course_id": 1,
+      "user_prompt": "Remove Variables as a prerequisite for Functions",
+      "summary": "Remove the Variables prerequisite from Functions, but flag the resulting gaps in parameter binding, local state, recursive activation records, and function-based algorithm implementations.",
+      "risk_level": "high",
+      "affected_items": [
+        "Functions: Parameters, Arguments, and Return Values lesson",
+        "Functions: Local Scope and Variable Lifetime lesson",
+        "Recursion: The Call Stack and Recursive State lesson",
+        "Algorithms: Divide-and-Conquer Design lesson",
+        "Assessment: Function Contracts and State Management quiz"
+      ],
+      "generated_diff": "--- curriculum/prerequisites/functions\n+++ curriculum/prerequisites/functions\n@@\n- prerequisite: Variables and Data Types\n+ prerequisite: none\n@@\n! BROKEN DEPENDENCY: Parameters and arguments reference variable binding concepts.\n! BROKEN DEPENDENCY: Local scope lesson assumes learners can trace variable lifetime.\n! BROKEN DEPENDENCY: Recursive activation records require parameter and local-state fluency.\n! BROKEN DEPENDENCY: Divide-and-conquer implementations require function-local variables.\n! BROKEN DEPENDENCY: Function Contracts quiz no longer has a verified conceptual prerequisite."
+    }
+  ]
+}
