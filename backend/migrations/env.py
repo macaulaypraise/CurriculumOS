@@ -2,42 +2,27 @@ import asyncio
 import sys
 import os
 from logging.config import fileConfig
-
 from sqlalchemy import pool
 from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
-
 from alembic import context
 
-# 1. Add the backend directory to sys.path so we can import app modules
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
 from app.core.config import settings
 from app.database.base import Base
-
-# 2. Import the models package.
-# This executes app/models/__init__.py, which registers all models with Base!
-import app.models
+import app.models # Registers all models with Base.metadata
 
 config = context.config
-
-# 3. Override the default placeholder URL with our real DATABASE_URL
 config.set_main_option("sqlalchemy.url", settings.database_url)
 
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
-# 4. Set target metadata for 'autogenerate' support
 target_metadata = Base.metadata
 
 def run_migrations_offline() -> None:
     url = config.get_main_option("sqlalchemy.url")
-    context.configure(
-        url=url,
-        target_metadata=target_metadata,
-        literal_binds=True,
-        dialect_opts={"paramstyle": "named"},
-    )
+    context.configure(url=url, target_metadata=target_metadata, literal_binds=True, dialect_opts={"paramstyle": "named"})
     with context.begin_transaction():
         context.run_migrations()
 

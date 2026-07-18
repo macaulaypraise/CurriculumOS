@@ -1,0 +1,7 @@
+import { FolderKanban, Plus } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
+
+export function ProjectsList() {
+  const navigate = useNavigate()
+  return <main className="min-h-screen bg-zinc-950 p-10 text-zinc-100"><div className="mx-auto max-w-6xl"><div className="flex items-end justify-between"><div><p className="text-xs font-semibold uppercase tracking-[.2em] text-cyan-400">CurriculumOS</p><h1 className="mt-3 text-3xl font-semibold">Projects</h1><p className="mt-2 text-zinc-400">Manage curriculum workspaces and their source-of-truth graphs.</p></div><button className="flex items-center gap-2 rounded-lg border border-zinc-700 px-4 py-2 text-sm text-zinc-300"><Plus className="h-4 w-4" />New project</button></div><button type="button" onClick={() => navigate('/projects/1/workspace')} className="mt-10 flex w-full items-center justify-between rounded-xl border border-zinc-800 bg-zinc-900 p-6 text-left transition hover:border-cyan-500/50"><div className="flex items-center gap-4"><div className="grid h-11 w-11 place-items-center rounded-lg bg-cyan-400/10 text-cyan-300"><FolderKanban className="h-5 w-5" /></div><div><p className="font-semibold">Computer Science Degree Revision</p><p className="mt-1 text-sm text-zinc-400">Advanced Computer Science · 4 modules</p></div></div><span className="text-sm font-medium text-cyan-300">Open Demo Project →</span></button></div></main>
+}

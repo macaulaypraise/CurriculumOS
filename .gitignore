@@ -8,3 +8,4 @@ backend/venv/
 backend/.venv/
 backend/.env
 backend/.python-version
+backend/backend.log

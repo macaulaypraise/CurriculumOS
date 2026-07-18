@@ -1,33 +1,80 @@
-import type { ReactNode } from 'react'
-import { BarChart3, BookOpen, Boxes, Cog, Sparkles } from 'lucide-react'
-
-export type WorkspaceTab = 'graph' | 'assessments' | 'debugger'
+import { NavLink, Outlet, useParams } from 'react-router-dom'
 
 interface LayoutProps {
-  activeTab: WorkspaceTab
   isDemoMode: boolean
-  onNavigate: (tab: WorkspaceTab) => void
-  onOpenSettings: () => void
-  children: ReactNode
 }
 
-const navItems: Array<{ id: WorkspaceTab; label: string; icon: typeof Boxes }> = [
-  { id: 'graph', label: 'Curriculum Graph', icon: Boxes },
-  { id: 'assessments', label: 'Assessments', icon: BookOpen },
-  { id: 'debugger', label: 'Learning Debugger', icon: BarChart3 },
+const navigation = [
+  { label: 'Overview', tab: 'overview' },
+  { label: 'Curriculum', tab: 'curriculum' },
+  { label: 'Assessments', tab: 'assessments' },
+  { label: 'Files', tab: 'files' },
+  { label: 'Changes', tab: 'changes' },
+  { label: 'History', tab: 'history' },
+  { label: 'Settings', tab: 'settings' },
 ]
 
-export function Layout({ activeTab, isDemoMode, onNavigate, onOpenSettings, children }: LayoutProps) {
+export function Layout({ isDemoMode }: LayoutProps) {
+  const { projectId } = useParams()
+  const projectPath = `/projects/${projectId}`
+
   return (
-    <div className="flex min-h-screen bg-zinc-950 text-zinc-100">
-      <aside className="flex w-64 shrink-0 flex-col border-r border-zinc-800 bg-zinc-900 px-3 py-4">
-        <div className="flex items-center gap-3 px-3 py-3"><div className="grid h-8 w-8 place-items-center rounded-lg bg-cyan-400 text-zinc-950"><Sparkles className="h-4 w-4" /></div><span className="text-sm font-semibold tracking-tight">CurriculumOS</span></div>
-        <nav className="mt-8 space-y-1">{navItems.map((item) => { const Icon = item.icon; const active = activeTab === item.id; return <button key={item.id} type="button" onClick={() => onNavigate(item.id)} className={`flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition ${active ? 'bg-zinc-800 text-zinc-100 shadow-sm' : 'text-zinc-400 hover:bg-zinc-800/60 hover:text-zinc-100'}`}><Icon className="h-4 w-4" />{item.label}</button> })}</nav>
-        <button type="button" onClick={onOpenSettings} className="mt-auto flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-zinc-400 transition hover:bg-zinc-800 hover:text-zinc-100"><Cog className="h-4 w-4" />Settings</button>
+    <div className="flex h-screen overflow-hidden bg-zinc-950 text-zinc-100">
+      <aside className="flex w-64 shrink-0 flex-col border-r border-zinc-800 bg-zinc-900/70 px-3 py-5">
+        <NavLink to="/projects" className="px-3 pb-8">
+          <p className="text-sm font-semibold tracking-tight text-zinc-100">CurriculumOS</p>
+          <p className="mt-1 text-xs text-zinc-500">Project workspace</p>
+        </NavLink>
+
+        <nav className="space-y-1" aria-label="Project navigation">
+          {navigation.map((item) => (
+            <NavLink
+              key={item.tab}
+              to={`${projectPath}/${item.tab}`}
+              className={({ isActive }) =>
+                `flex items-center rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+                  isActive
+                    ? 'bg-zinc-800 text-zinc-100 shadow-sm'
+                    : 'text-zinc-400 hover:bg-zinc-800/60 hover:text-zinc-100'
+                }`
+              }
+            >
+              {item.label}
+            </NavLink>
+          ))}
+        </nav>
+
+        <div className="mt-auto border-t border-zinc-800 px-3 pt-4 text-xs text-zinc-500">
+          Project #{projectId}
+        </div>
       </aside>
+
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="flex h-16 items-center justify-between border-b border-zinc-800 bg-zinc-950 px-8"><div className="text-sm text-zinc-400"><span>Workspace</span><span className="mx-2 text-zinc-700">/</span><span className="text-zinc-100">{navItems.find((item) => item.id === activeTab)?.label}</span></div><div className="flex items-center gap-5"><div className="flex items-center gap-2 text-xs font-medium text-zinc-400"><span className={`h-2 w-2 rounded-full ${isDemoMode ? 'bg-amber-400' : 'bg-emerald-400'}`} />{isDemoMode ? 'Demo Mode' : 'Live AI'}</div><div className="grid h-8 w-8 place-items-center rounded-full bg-zinc-800 text-xs font-semibold text-zinc-300">U</div></div></header>
-        <main className="min-h-0 flex-1 overflow-auto">{children}</main>
+        <header className="flex h-16 shrink-0 items-center justify-between border-b border-zinc-800 px-6">
+          <div>
+            <p className="text-xs font-medium uppercase tracking-[0.16em] text-zinc-500">Projects</p>
+            <p className="mt-0.5 text-sm font-medium text-zinc-200">Computer Science Degree Revision</p>
+          </div>
+          <div className="flex items-center gap-4">
+            <span className="flex items-center gap-2 text-xs text-zinc-400">
+              <span className={`h-2 w-2 rounded-full ${isDemoMode ? 'bg-amber-400' : 'bg-emerald-400'}`} />
+              {isDemoMode ? 'Demo Mode' : 'Live AI'}
+            </span>
+            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-zinc-800 text-xs font-semibold text-zinc-300">
+              U
+            </span>
+          </div>
+        </header>
+
+        {isDemoMode && (
+          <div className="border-b border-amber-500/20 bg-amber-500/5 px-6 py-2 text-xs text-amber-200">
+            Running in Interactive Demo Mode. Data is pre-computed to showcase the workflow.
+          </div>
+        )}
+
+        <main className="min-h-0 min-w-0 flex-1 overflow-auto">
+          <Outlet />
+        </main>
       </div>
     </div>
   )

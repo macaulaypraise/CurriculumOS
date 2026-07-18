@@ -1,26 +1,77 @@
-import logging
-
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, status
+from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.database.session import get_db_session
-from app.schemas.change import ChangeRequest, CurriculumPR
-from app.services.ai_change import propose_change
+from app.core.dependencies import get_openai_key
+from app.database.session import get_db
+from app.models.activity_event import ActivityEvent
+from app.models.course import Course
+from app.models.curriculum_version import CurriculumVersion
+from app.models.project import Project
+from app.schemas.change import ChangeRequest
+from app.schemas.version import ChangeApprovalRequest, CurriculumVersionResponse
+from app.services.ai_gateway import AIGateway
 
-logger = logging.getLogger(__name__)
-
-router = APIRouter(prefix="/changes", tags=["changes"])
+router = APIRouter(tags=["changes"])
 
 
-@router.post("/propose", response_model=CurriculumPR)
+@router.post("/changes/propose")
 async def propose_curriculum_change(
     request: ChangeRequest,
-    session: AsyncSession = Depends(get_db_session),
-) -> CurriculumPR:
+    api_key: str | None = Depends(get_openai_key),
+) -> dict[str, object]:
+    gateway = AIGateway(api_key=api_key)
+    proposal = await gateway.propose_change(request.course_id, request.user_prompt)
+    response: dict[str, object] = proposal.model_dump()
+    if gateway.is_demo_mode:
+        response["is_demo_mode"] = True
+    return response
+
+
+@router.post(
+    "/projects/{project_id}/approve-change",
+    response_model=CurriculumVersionResponse,
+    status_code=status.HTTP_201_CREATED,
+)
+async def approve_curriculum_change(
+    project_id: int,
+    request: ChangeApprovalRequest,
+    session: AsyncSession = Depends(get_db),
+) -> CurriculumVersion:
+    project = await session.get(Project, project_id)
+    if project is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Project not found")
+
+    course = await session.scalar(select(Course).where(Course.project_id == project_id).order_by(Course.id))
+    if course is None:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Project has no course")
+
+    latest_version = await session.scalar(
+        select(func.coalesce(func.max(CurriculumVersion.version_number), 0)).where(
+            CurriculumVersion.project_id == project_id
+        )
+    )
+    version = CurriculumVersion(
+        project_id=project_id,
+        course_id=course.id,
+        version_number=int(latest_version) + 1,
+        description=request.change_description,
+        snapshot={"status": "approved"},
+    )
+
     try:
-        return await propose_change(session, request.course_id, request.user_prompt)
-    except LookupError as error:
-        raise HTTPException(status_code=404, detail=str(error)) from error
-    except Exception as error:
-        logger.exception("Curriculum change proposal failed.")
-        raise HTTPException(status_code=502, detail="Unable to generate a curriculum proposal.") from error
+        session.add(version)
+        session.add(
+            ActivityEvent(
+                project_id=project_id,
+                event_type="version_created",
+                description=f"Version {version.version_number} created: {version.description}",
+            )
+        )
+        await session.commit()
+        await session.refresh(version)
+    except Exception:
+        await session.rollback()
+        raise
+
+    return version
