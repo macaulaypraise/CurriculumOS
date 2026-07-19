@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.core.dependencies import get_openai_key
+from app.core.dependencies import get_ai_credentials
 from app.database.session import get_db
 from app.models.activity_event import ActivityEvent
 from app.models.course import Course
@@ -18,9 +18,10 @@ router = APIRouter(tags=["changes"])
 @router.post("/changes/propose")
 async def propose_curriculum_change(
     request: ChangeRequest,
-    api_key: str | None = Depends(get_openai_key),
+    credentials: tuple[str | None, str | None] = Depends(get_ai_credentials),
 ) -> dict[str, object]:
-    gateway = AIGateway(api_key=api_key)
+    api_key, provider = credentials
+    gateway = AIGateway(api_key=api_key, provider=provider)
     proposal = await gateway.propose_change(request.course_id, request.user_prompt)
     response: dict[str, object] = proposal.model_dump()
     if gateway.is_demo_mode:
@@ -47,9 +48,7 @@ async def approve_curriculum_change(
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Project has no course")
 
     latest_version = await session.scalar(
-        select(func.coalesce(func.max(CurriculumVersion.version_number), 0)).where(
-            CurriculumVersion.project_id == project_id
-        )
+        select(func.coalesce(func.max(CurriculumVersion.version_number), 0)).where(CurriculumVersion.project_id == project_id)
     )
     version = CurriculumVersion(
         project_id=project_id,
@@ -61,17 +60,10 @@ async def approve_curriculum_change(
 
     try:
         session.add(version)
-        session.add(
-            ActivityEvent(
-                project_id=project_id,
-                event_type="version_created",
-                description=f"Version {version.version_number} created: {version.description}",
-            )
-        )
+        session.add(ActivityEvent(project_id=project_id, event_type="version_created", description=f"Version {version.version_number} created: {version.description}"))
         await session.commit()
         await session.refresh(version)
     except Exception:
         await session.rollback()
         raise
-
     return version

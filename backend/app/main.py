@@ -4,7 +4,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.api.activity import router as activity_router
 from app.api.assessments import router as assessments_router
 from app.api.changes import router as changes_router
+from app.api.courses import router as courses_router
 from app.api.curriculum import router as curriculum_router
+from app.api.debugger import router as debugger_router
+from app.api.files import router as files_router
 from app.api.projects import router as projects_router
 from app.api.versions import router as versions_router
 
@@ -19,11 +22,14 @@ app.add_middleware(
 )
 
 app.include_router(projects_router)
+app.include_router(courses_router)
 app.include_router(curriculum_router)
 app.include_router(changes_router)
 app.include_router(versions_router)
 app.include_router(assessments_router)
 app.include_router(activity_router)
+app.include_router(files_router)
+app.include_router(debugger_router)
 
 
 @app.get("/health")
