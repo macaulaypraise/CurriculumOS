@@ -95,14 +95,33 @@ async def seed_database() -> None:
                     await session.flush()
                     for lesson_data in module_data["lessons"]:
                         session.add(Lesson(module_id=module.id, title=lesson_data["title"], description=lesson_data["description"], position=lesson_data["position"]))
-                    for outcome_data in module_data["learning_outcomes"]:
-                        session.add(LearningOutcome(module_id=module.id, statement=outcome_data["statement"]))
+                    for out_idx, outcome_data in enumerate(module_data.get("learning_outcomes", [])):
+                        session.add(
+                            LearningOutcome(
+                                module_id=module.id,
+                                statement=outcome_data["statement"],
+                                position=outcome_data.get("position") or (out_idx + 1),
+                            )
+                        )
 
             if first_course is not None:
                 session.add(CurriculumVersion(project_id=project.id, course_id=first_course.id, version_number=1, description="Initial Curriculum Extraction", snapshot={"status": "initial"}))
                 await session.flush()
                 await add_initial_assessment(session, project)
             await add_initial_activity(session, project)
+
+            existing_version = await session.scalar(
+                select(CurriculumVersion).where(CurriculumVersion.project_id == project.id)
+            )
+            if not existing_version:
+                session.add(CurriculumVersion(
+                    project_id=project.id,
+                    course_id=course.id,
+                    version_number=1,
+                    description="Initial Curriculum Extraction",
+                    snapshot={"status": "initial", "message": "Demo Fortress Seed"}
+                ))
+
             await session.commit()
         except Exception:
             await session.rollback()
