@@ -6,6 +6,7 @@ from app.models.curriculum_version import CurriculumVersion
 from app.models.learning_outcome import LearningOutcome
 from app.models.lesson import Lesson
 from app.models.module import Module
+from app.models.module_prerequisite import ModulePrerequisite
 from app.models.project import Project
 
 __all__ = [
@@ -17,5 +18,6 @@ __all__ = [
     "LearningOutcome",
     "Lesson",
     "Module",
+    "ModulePrerequisite",
     "Project",
 ]
