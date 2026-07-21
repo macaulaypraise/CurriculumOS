@@ -10,6 +10,8 @@ class LearningOutcome(BaseModel):
         }
     )
 
+    id: int | None = Field(default=None, description="Database identifier when this outcome is loaded from persistence.")
+    position: int | None = Field(default=None, description="Ordered position within the module when persisted.")
     statement: str = Field(
         description="A concise, measurable statement of what the learner will be able to do."
     )
@@ -22,6 +24,8 @@ class Lesson(BaseModel):
         json_schema_extra={"description": "One lesson that belongs to a curriculum module."}
     )
 
+    id: int | None = Field(default=None, description="Database identifier when this lesson is loaded from persistence.")
+    position: int | None = Field(default=None, description="Ordered position within the module when persisted.")
     title: str = Field(description="The lesson title as stated or clearly implied by the source material.")
     description: str = Field(
         description="A brief description of the concepts, skills, or activities covered by the lesson."
@@ -37,6 +41,8 @@ class Module(BaseModel):
         }
     )
 
+    id: int | None = Field(default=None, description="Database identifier when this module is loaded from persistence.")
+    position: int | None = Field(default=None, description="Ordered position within the course when persisted.")
     title: str = Field(description="The module title as stated or clearly implied by the source material.")
     description: str = Field(description="A brief summary of the module's scope and purpose.")
     lessons: list[Lesson] = Field(

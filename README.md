@@ -63,23 +63,28 @@ API Route → AIGateway → DemoProvider | OpenAIProvider
 - **OpenAIProvider** is the live-provider boundary for BYOK usage.
 - Both providers return the same shapes for Curriculum Pull Requests and generated assessments.
 
+
+## Challenges We Ran Into
+* **The "Silent Swallow" Trap:** Our mutation engine's `try/except` block was catching database errors, rolling back, but *silently continuing* to save a new version of the unchanged graph. The UI showed "Success!" while nothing changed. Forcing the backend to throw loud 400 errors was a massive debugging breakthrough.
+* **The Pydantic ID-Stripping Illusion:** We spent hours debugging why the React Flow graph wouldn't render new nodes after a successful mutation. Our Pydantic serialization layer was omitting the `id` fields, causing React Flow to receive `undefined` IDs and silently reject the nodes.
+* **Agentic File-Sync Hallucinations:** Working with Codex in a WSL environment led to scenarios where the agent claimed a fix was applied, but the disk was untouched. This taught me to rigorously verify the actual artifact on disk rather than trusting the agent's chat output.
+
 ### BYOK Enterprise Architecture
 
 CurriculumOS supports **Bring Your Own Key**. A user may supply an `X-OpenAI-Key` header from the workspace settings; the backend resolves it before falling back to server-side configuration. The frontend automatically attaches a locally stored key to requests, while the backend retains control over provider selection and data persistence.
 
 ## How We Used Codex and GPT-5.6
 
-### Codex: Implementation Engineer
+### Codex: The Autonomous Pair-Programmer
+I treated Codex as my autonomous engineer, but I quickly learned that my job had to shift from "writing code" to "designing the harness." AI agents are incredible, but they are terrible at knowing when they've failed silently.
 
-Codex acted as the Implementation Engineer for tightly scoped, architecture-driven sprints. Each sprint followed the project’s `/docs` Engineering Playbook: establish the domain change, implement the database and API contract, preserve protected registry files, then wire the corresponding workspace surface. Codex was used to build the FastAPI/SQLAlchemy models, provider gateway, routers, React workspace tabs, and the integration paths between them.
+Early on, Codex would confidently report "I fixed the endpoint," but the file on my WSL environment was completely untouched. I also had to enforce a strict "Demo Fortress" pattern—wrapping every live AI call in deterministic fallbacks—because without strict architectural constraints, the agent would hallucinate success states or let API latency ruin the demo. By feeding Codex tightly scoped, multi-file tickets (e.g., "Wire the course_id through the approval flow and preserve the Demo Fortress fallback"), we shipped a 3-tier SaaS backend, Alembic migrations, and a complex mutation engine in a single weekend.
 
-### GPT-5.6: Offline Curriculum Engineer
-
-GPT-5.6, accessed through Codex, acted as an Offline Curriculum Engineer to synthesize the academically rigorous demo material in `seed_data.json`. It produced the Advanced Computer Science dependency graph, realistic learning outcomes, structural curriculum-change analyses, risk assessments, affected-item lists, diffs, and assessment scenarios. This let the product demonstrate authentic curriculum-engineering reasoning without relying on a fragile live call during judging.
+### GPT-5.6: The Context-Aware Curriculum Engine
+GPT-5.6 is the brain behind the "Assessment Compiler" and the topological risk analysis. Instead of feeding it generic prompts, the custom AI Gateway forces GPT-5.6 to read the live PostgreSQL context. If a teacher asks for a "Module Exam" on *CSS & Responsive Design*, GPT-5.6 reads the database, understands the specific lessons (Flexbox, Grid, Media Queries), and generates a highly tailored rubric and exam scoped exactly to those outcomes.
 
 ### The Demo Fortress
-
-The AI Gateway and `DemoProvider` form a deliberate **Demo Fortress**. Pre-computed GPT-5.6 scenarios provide a zero-latency, zero-crash path for judges while preserving the exact request and response contracts used by the live `OpenAIProvider`. The result is complete transparency: the workspace clearly identifies Demo Mode, yet every workflow—proposal generation, approval, versioning, and assessment compilation—runs through the same real application architecture and persistence layer.
+To guarantee zero-latency and zero-crash presentations, we built a "Demo Fortress." If no OpenAI API key is provided, the AI Gateway seamlessly routes requests to a `DemoProvider`. This provider uses string interpolation against the live database records to generate context-aware, deterministic JSON responses. The workspace clearly identifies Demo Mode, but every workflow runs through the exact same real application architecture.
 
 ## Local Setup
 
@@ -127,4 +132,4 @@ The seeder creates the **Computer Science Degree Revision** project, its Advance
 6. Open Assessments to inspect the seeded quiz or generate a new outcome-aligned assessment.
 7. Open Overview or History to see the project’s evolving audit trail.
 
-## Codex Session ID: [INSERT YOUR /feedback SESSION ID HERE]
+## Codex Session ID: [019f6fc9-59fe-7431-9e02-ac5ab6ad08f7]

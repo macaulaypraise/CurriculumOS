@@ -134,6 +134,308 @@
           ]
         }
       ]
+    },
+    {
+      "id": 2,
+      "title": "Web Development Fundamentals",
+      "description": "A comprehensive introduction to modern web development covering frontend frameworks, backend APIs, and full-stack deployment strategies.",
+      "modules": [
+        {
+          "position": 1,
+          "title": "HTML & Semantic Markup",
+          "description": "Covers semantic HTML5, accessibility standards, and document structure for modern web applications.",
+          "lessons": [
+            {
+              "position": 1,
+              "title": "Semantic Elements and Document Structure",
+              "description": "Uses header, nav, main, article, and footer elements to create meaningful document hierarchies."
+            },
+            {
+              "position": 2,
+              "title": "Forms and User Input",
+              "description": "Builds accessible forms with validation, input types, and proper labeling for screen readers."
+            },
+            {
+              "position": 3,
+              "title": "Accessibility and ARIA",
+              "description": "Implements WCAG 2.1 guidelines using ARIA roles, states, and properties for inclusive design."
+            }
+          ],
+          "learning_outcomes": [
+            {
+              "position": 1,
+              "statement": "Create semantic HTML documents that pass accessibility audits and validate against W3C standards."
+            },
+            {
+              "position": 2,
+              "statement": "Build forms with client-side validation that degrade gracefully without JavaScript."
+            }
+          ]
+        },
+        {
+          "position": 2,
+          "title": "CSS & Responsive Design",
+          "description": "Explores modern CSS layout systems, responsive design patterns, and component-based styling.",
+          "lessons": [
+            {
+              "position": 1,
+              "title": "Flexbox and Grid Layouts",
+              "description": "Constructs flexible and grid-based layouts using modern CSS properties and alignment techniques."
+            },
+            {
+              "position": 2,
+              "title": "Media Queries and Mobile-First Design",
+              "description": "Implements responsive breakpoints and mobile-first strategies for cross-device compatibility."
+            },
+            {
+              "position": 3,
+              "title": "CSS Custom Properties and Theming",
+              "description": "Uses CSS variables and custom properties to create maintainable, themeable design systems."
+            }
+          ],
+          "learning_outcomes": [
+            {
+              "position": 1,
+              "statement": "Design responsive layouts using Flexbox and Grid that adapt to viewport sizes from 320px to 4K."
+            },
+            {
+              "position": 2,
+              "statement": "Implement a design token system using CSS custom properties for consistent theming."
+            }
+          ]
+        },
+        {
+          "position": 3,
+          "title": "JavaScript Fundamentals",
+          "description": "Covers modern JavaScript including ES6+ features, asynchronous programming, and DOM manipulation.",
+          "lessons": [
+            {
+              "position": 1,
+              "title": "ES6+ Features and Modern Syntax",
+              "description": "Uses destructuring, spread operators, arrow functions, and modules in contemporary JavaScript code."
+            },
+            {
+              "position": 2,
+              "title": "Asynchronous JavaScript and Promises",
+              "description": "Handles asynchronous operations using Promises, async/await, and error handling patterns."
+            },
+            {
+              "position": 3,
+              "title": "DOM Manipulation and Events",
+              "description": "Manipulates the Document Object Model and handles user interactions with event delegation."
+            }
+          ],
+          "learning_outcomes": [
+            {
+              "position": 1,
+              "statement": "Write modern JavaScript using ES6+ features and module systems for maintainable code."
+            },
+            {
+              "position": 2,
+              "statement": "Implement asynchronous workflows using Promises and async/await with proper error handling."
+            }
+          ]
+        },
+        {
+          "position": 4,
+          "title": "React & Component Architecture",
+          "description": "Introduces React fundamentals, component composition, state management, and hooks.",
+          "lessons": [
+            {
+              "position": 1,
+              "title": "Components, Props, and JSX",
+              "description": "Builds reusable React components using functional components, props, and JSX syntax."
+            },
+            {
+              "position": 2,
+              "title": "State Management with Hooks",
+              "description": "Manages component state using useState, useEffect, and custom hooks for side effects."
+            },
+            {
+              "position": 3,
+              "title": "Context API and Global State",
+              "description": "Shares state across component trees using Context API and reduces prop drilling."
+            }
+          ],
+          "learning_outcomes": [
+            {
+              "position": 1,
+              "statement": "Design component hierarchies with clear prop interfaces and composition patterns."
+            },
+            {
+              "position": 2,
+              "statement": "Implement state management using React hooks and Context for scalable applications."
+            }
+          ]
+        },
+        {
+          "position": 5,
+          "title": "Backend APIs & Deployment",
+          "description": "Covers RESTful API design, database integration, and modern deployment strategies.",
+          "lessons": [
+            {
+              "position": 1,
+              "title": "RESTful API Design",
+              "description": "Designs RESTful endpoints using proper HTTP methods, status codes, and resource naming."
+            },
+            {
+              "position": 2,
+              "title": "Database Integration with ORMs",
+              "description": "Connects APIs to databases using ORMs, migrations, and query optimization techniques."
+            },
+            {
+              "position": 3,
+              "title": "Deployment and CI/CD",
+              "description": "Deploys full-stack applications using containerization, cloud platforms, and automated pipelines."
+            }
+          ],
+          "learning_outcomes": [
+            {
+              "position": 1,
+              "statement": "Design and implement RESTful APIs following REST conventions and OpenAPI specifications."
+            },
+            {
+              "position": 2,
+              "statement": "Deploy containerized applications with automated CI/CD pipelines to cloud platforms."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "title": "Data Science & Analytics",
+      "description": "A practical introduction to data science covering statistical analysis, machine learning fundamentals, and data visualization.",
+      "modules": [
+        {
+          "position": 1,
+          "title": "Python for Data Science",
+          "description": "Covers Python programming fundamentals and essential libraries for data manipulation and analysis.",
+          "lessons": [
+            {
+              "position": 1,
+              "title": "NumPy and Array Operations",
+              "description": "Performs numerical computations using NumPy arrays, broadcasting, and vectorized operations."
+            },
+            {
+              "position": 2,
+              "title": "Pandas DataFrames",
+              "description": "Manipulates structured data using Pandas DataFrames, Series, and data cleaning techniques."
+            },
+            {
+              "position": 3,
+              "title": "Data Import and Export",
+              "description": "Reads and writes data from CSV, JSON, Excel, and SQL databases using Pandas and specialized libraries."
+            }
+          ],
+          "learning_outcomes": [
+            {
+              "position": 1,
+              "statement": "Perform efficient numerical computations using NumPy arrays and vectorized operations."
+            },
+            {
+              "position": 2,
+              "statement": "Clean, transform, and analyze datasets using Pandas DataFrames and built-in methods."
+            }
+          ]
+        },
+        {
+          "position": 2,
+          "title": "Statistical Analysis",
+          "description": "Introduces descriptive and inferential statistics, hypothesis testing, and probability distributions.",
+          "lessons": [
+            {
+              "position": 1,
+              "title": "Descriptive Statistics and Distributions",
+              "description": "Calculates measures of central tendency, dispersion, and visualizes probability distributions."
+            },
+            {
+              "position": 2,
+              "title": "Hypothesis Testing and p-values",
+              "description": "Conducts t-tests, chi-square tests, and ANOVA to evaluate statistical significance."
+            },
+            {
+              "position": 3,
+              "title": "Correlation and Regression",
+              "description": "Analyzes relationships between variables using correlation coefficients and linear regression models."
+            }
+          ],
+          "learning_outcomes": [
+            {
+              "position": 1,
+              "statement": "Apply descriptive statistics to summarize datasets and identify distribution characteristics."
+            },
+            {
+              "position": 2,
+              "statement": "Design and interpret hypothesis tests with proper p-value analysis and confidence intervals."
+            }
+          ]
+        },
+        {
+          "position": 3,
+          "title": "Data Visualization",
+          "description": "Covers principles of effective visualization and hands-on implementation using modern libraries.",
+          "lessons": [
+            {
+              "position": 1,
+              "title": "Visualization Principles and Design",
+              "description": "Applies Tufte's principles, color theory, and Gestalt laws to create effective visualizations."
+            },
+            {
+              "position": 2,
+              "title": "Matplotlib and Seaborn",
+              "description": "Creates static visualizations using Matplotlib and statistical plots using Seaborn."
+            },
+            {
+              "position": 3,
+              "title": "Interactive Dashboards with Plotly",
+              "description": "Builds interactive dashboards and web-based visualizations using Plotly and Dash."
+            }
+          ],
+          "learning_outcomes": [
+            {
+              "position": 1,
+              "statement": "Design visualizations following best practices for clarity, accuracy, and aesthetic appeal."
+            },
+            {
+              "position": 2,
+              "statement": "Create interactive dashboards that enable exploratory data analysis and stakeholder communication."
+            }
+          ]
+        },
+        {
+          "position": 4,
+          "title": "Machine Learning Fundamentals",
+          "description": "Introduces supervised and unsupervised learning algorithms, model evaluation, and practical implementation.",
+          "lessons": [
+            {
+              "position": 1,
+              "title": "Supervised Learning and Classification",
+              "description": "Implements classification algorithms including logistic regression, decision trees, and random forests."
+            },
+            {
+              "position": 2,
+              "title": "Regression and Prediction",
+              "description": "Builds regression models for continuous prediction tasks and evaluates model performance."
+            },
+            {
+              "position": 3,
+              "title": "Model Evaluation and Validation",
+              "description": "Uses cross-validation, confusion matrices, ROC curves, and metrics to assess model quality."
+            }
+          ],
+          "learning_outcomes": [
+            {
+              "position": 1,
+              "statement": "Select and implement appropriate machine learning algorithms for classification and regression tasks."
+            },
+            {
+              "position": 2,
+              "statement": "Evaluate model performance using appropriate metrics and validation strategies to prevent overfitting."
+            }
+          ]
+        }
+      ]
     }
   ],
   "proposed_changes": [
@@ -149,7 +451,7 @@
         "Trees: Binary Search Tree Operations lesson",
         "Quiz 3: Recursive Tree Traversal and BST Invariants"
       ],
-      "generated_diff": "--- curriculum/module-order\n+++ curriculum/module-order\n@@\n- 3. Trees\n- 4. Recursion\n+ 3. Recursion\n+ 4. Trees\n@@\n- Trees: Tree Terminology and Recursive Representation\n+ Prerequisite added: Recursion: The Call Stack and Recursive State\n+ Trees: Tree Terminology and Recursive Representation\n@@\n- Quiz 3 assesses traversal after the Trees module\n+ Quiz 3 moves after Trees and now assumes completion of the Recursion module"
+      "generated_diff": "--- curriculum/module-order\n+++ curriculum/module-order\n@@\n- 3. Trees\n- 4. Recursion\n+ 3. Recursion\n+ 4. Trees\n@@\n- Trees: Tree Terminology and Recursive Representation\n+  Prerequisite added: Recursion: The Call Stack and Recursive State\n+ Trees: Tree Terminology and Recursive Representation\n@@\n- Quiz 3 assesses traversal after the Trees module\n+ Quiz 3 moves after Trees and now assumes completion of the Recursion module"
     },
     {
       "id": "pr-002",

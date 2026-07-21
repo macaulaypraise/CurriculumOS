@@ -1,4 +1,4 @@
-import axios from 'axios'
+﻿import axios from 'axios'
 
 export interface Lesson { id: number; title: string; description: string; position: number }
 export interface LearningOutcome { id: number; statement: string }
@@ -11,8 +11,9 @@ export interface CurriculumVersion { id: number; project_id: number; course_id: 
 export interface ChangeApprovalResponse { version: CurriculumVersion; graph: Course; is_demo_mode: boolean }
 export interface AssessmentQuestion { question: string; prompt?: string; parts?: string[]; points?: number }
 export interface AssessmentRubricCriterion { criterion: string; points: number; description: string }
-export interface Assessment { id: number; project_id: number; course_id: number; learning_outcome_id: number | null; title: string; questions: AssessmentQuestion[]; rubric: { total_points?: number; criteria?: AssessmentRubricCriterion[] }; created_at: string }
-export interface AssessmentGenerationData { learning_outcome_id: number; outcome_text: string }
+export interface Assessment { id: number; project_id: number; course_id: number; learning_outcome_id: number | null; title: string; questions: AssessmentQuestion[]; rubric: { total_points?: number; criteria?: AssessmentRubricCriterion[]; scope?: AssessmentScope; target_id?: number; target_title?: string; course_id?: number }; created_at: string }
+export type AssessmentScope = 'outcome' | 'module' | 'course'
+export interface AssessmentGenerationData { scope?: AssessmentScope; target_id?: number; learning_outcome_id?: number; outcome_text?: string }
 export interface ActivityEvent { id: number; project_id: number; event_type: string; description: string; created_at: string }
 export interface UploadCurriculumResponse { project_id: number; course_id: number; is_fallback: boolean; message: string }
 
@@ -33,7 +34,7 @@ export async function createCourseWithFile(projectId: number, name: string, file
 export async function fetchCourse(courseId: number): Promise<Course> { return (await apiClient.get<Course>(`/curriculum/${courseId}`)).data }
 export async function fetchProjectGraph(projectId: string | number): Promise<Course> { return (await apiClient.get<Course>(`/projects/${projectId}/graph`)).data }
 export async function proposeChange(courseId: number, userPrompt: string): Promise<CurriculumPR> { return (await apiClient.post<CurriculumPR>('/changes/propose', { course_id: courseId, user_prompt: userPrompt })).data }
-export async function approveChange(projectId: number, changeDescription: string): Promise<ChangeApprovalResponse> { return (await apiClient.post<ChangeApprovalResponse>(`/projects/${projectId}/approve-change`, { change_description: changeDescription })).data }
+export async function approveChange(projectId: number, changeDescription: string, courseId?: number): Promise<ChangeApprovalResponse> { return (await apiClient.post<ChangeApprovalResponse>(`/projects/${projectId}/approve-change`, { change_description: changeDescription, course_id: courseId })).data }
 export async function fetchProjectVersions(projectId: string | number): Promise<CurriculumVersion[]> { return (await apiClient.get<CurriculumVersion[]>(`/projects/${projectId}/versions`)).data }
 export async function fetchProjectAssessments(projectId: string | number): Promise<Assessment[]> { return (await apiClient.get<Assessment[]>(`/projects/${projectId}/assessments`)).data }
 export async function generateAssessment(projectId: string | number, payload: AssessmentGenerationData): Promise<Assessment> { return (await apiClient.post<Assessment>(`/projects/${projectId}/assessments/generate`, payload)).data }
@@ -41,3 +42,7 @@ export async function renameAssessment(projectId: number, assessmentId: number, 
 export async function archiveAssessment(projectId: number, assessmentId: number): Promise<void> { await apiClient.delete(`/projects/${projectId}/assessments/${assessmentId}`) }
 export async function fetchProjectActivity(projectId: string | number): Promise<ActivityEvent[]> { return (await apiClient.get<ActivityEvent[]>(`/projects/${projectId}/activity`)).data }
 export const fetchVersions = fetchProjectVersions
+
+export async function revertProjectVersion(projectId: number, versionNumber: number): Promise<ChangeApprovalResponse> {
+  return (await apiClient.post<ChangeApprovalResponse>(`/projects/${projectId}/revert/${versionNumber}`)).data
+}

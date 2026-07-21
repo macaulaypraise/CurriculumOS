@@ -10,6 +10,7 @@ class ModulePositionUpdate(BaseModel):
 
 
 class ChangeApprovalRequest(BaseModel):
+    course_id: int | None = None
     change_description: str = Field(min_length=1, max_length=500)
     module_position_updates: list[ModulePositionUpdate] = Field(default_factory=list)
 
